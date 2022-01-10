@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-cube-puzzle/static/css/main.a687e476.css",
+    "main.js": "/react-cube-puzzle/static/js/main.b0400eaf.js",
+    "index.html": "/react-cube-puzzle/index.html",
+    "main.a687e476.css.map": "/react-cube-puzzle/static/css/main.a687e476.css.map",
+    "main.b0400eaf.js.map": "/react-cube-puzzle/static/js/main.b0400eaf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a687e476.css",
+    "static/js/main.b0400eaf.js"
+  ]
+}
