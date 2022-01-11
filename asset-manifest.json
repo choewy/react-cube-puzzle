@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/react-cube-puzzle/static/css/main.a687e476.css",
-    "main.js": "/react-cube-puzzle/static/js/main.b0400eaf.js",
+    "main.css": "/react-cube-puzzle/static/css/main.4f5dbd86.css",
+    "main.js": "/react-cube-puzzle/static/js/main.4a70e1b8.js",
     "index.html": "/react-cube-puzzle/index.html",
-    "main.a687e476.css.map": "/react-cube-puzzle/static/css/main.a687e476.css.map",
-    "main.b0400eaf.js.map": "/react-cube-puzzle/static/js/main.b0400eaf.js.map"
+    "main.4f5dbd86.css.map": "/react-cube-puzzle/static/css/main.4f5dbd86.css.map",
+    "main.4a70e1b8.js.map": "/react-cube-puzzle/static/js/main.4a70e1b8.js.map"
   },
   "entrypoints": [
-    "static/css/main.a687e476.css",
-    "static/js/main.b0400eaf.js"
+    "static/css/main.4f5dbd86.css",
+    "static/js/main.4a70e1b8.js"
   ]
 }
