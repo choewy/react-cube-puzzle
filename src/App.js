@@ -1,82 +1,90 @@
 import { useRef, useState } from 'react';
 import './index.css';
 
-const App = () => {
-  const gameBoard = useRef();
-  const nextModal = useRef();
+const getNearBlocks = (row, col) => {
+  return [
+    [row - 1, col],
+    [row, col],
+    [row + 1, col],
+    [row, col - 1],
+    [row, col + 1]
+  ];
+};
 
-  const [stage, setStage] = useState(1);
-
-  const blockHover = (status, row, col) => {
-    const targets = [
-      [row - 1, col],
-      [row, col],
-      [row + 1, col],
-      [row, col - 1],
-      [row, col + 1]
-    ];
-    targets.forEach(target => {
-      const [y, x] = target;
-      const block = gameBoard.current.firstChild.children[y]
-        ? gameBoard.current.firstChild.children[y].firstChild.children[x]
-        : undefined;
-      if (block) {
-        if (status === 'over') {
-          block.className += '_hover';
-        } else {
-          block.className = block.className.split('_')[0];
-        }
-      }
-    });
+const changeBlockClassName = (block) => {
+  if (block) {
+    block.className = block.className.split('_')[0] === 'close'
+      ? 'open'
+      : 'close'
   };
+};
 
-  const blockClick = (row, col) => {
-    const targets = [
-      [row - 1, col],
-      [row, col],
-      [row + 1, col],
-      [row, col - 1],
-      [row, col + 1]
-    ];
-    targets.forEach(target => {
-      const [y, x] = target;
-      const block = gameBoard.current.firstChild.children[y]
-        ? gameBoard.current.firstChild.children[y].firstChild.children[x]
-        : undefined;
-      if (block) {
-        block.className = block.className.split('_').includes('close')
-          ? block.className = 'open'
-          : block.className = 'close'
-      }
-    });
-
-    let next = true;
-    [...gameBoard.current.firstChild.children].forEach(line => {
-      [...line.firstChild.children].forEach(block => {
-        if (block.className === 'close') {
-          next = false;
-          return next;
-        }
-      });
-      return next;
-    });
-
-    if (next) {
-      nextModal.current.style.display = 'flex';
-    };
+const changeModalDisplay = (ref, display) => {
+  if (ref) {
+    ref.current.style.display = display;
   };
+};
 
-  const closeAllBlocks = () => {
-    [...gameBoard.current.firstChild.children].forEach(line => {
+const changeBlocksToClose = (ref) => {
+  if (ref) {
+    [...ref.current.firstChild.children].forEach(line => {
       [...line.firstChild.children].forEach(block => {
         block.className = 'close';
       });
     });
   };
+};
 
-  const nextStageClick = () => {
-    closeAllBlocks();
-    nextModal.current.style.display = 'none';
+const App = () => {
+  const gameBoard = useRef();
+  const clearModal = useRef();
+
+  const [stage, setStage] = useState(1);
+
+  const handleMouseOverBlock = (status, row, col) => {
+    const blocks = getNearBlocks(row, col);
+    blocks.forEach(target => {
+      const [y, x] = target;
+      const block = gameBoard.current.firstChild.children[y]
+        ? gameBoard.current.firstChild.children[y].firstChild.children[x]
+        : undefined;
+      if (block) {
+        block.className = status === 'over'
+          ? block.className + '_hover'
+          : block.className.split('_')[0]
+      }
+    });
+  };
+
+  const handleMouseClickBlock = (row, col) => {
+    const blocks = getNearBlocks(row, col);
+    blocks.forEach(target => {
+      const [y, x] = target;
+      const block = gameBoard.current.firstChild.children[y]
+        ? gameBoard.current.firstChild.children[y].firstChild.children[x]
+        : undefined;
+      changeBlockClassName(block, 'open');
+    });
+
+    let iSClear = true;
+    [...gameBoard.current.firstChild.children].forEach(line => {
+      [...line.firstChild.children].forEach(block => {
+        if (block.className === 'close') {
+          iSClear = false;
+          return iSClear;
+        }
+      });
+      return iSClear;
+    });
+
+    if (iSClear) {
+      changeModalDisplay(clearModal, 'flex');
+    };
+  };
+
+  const handleClickNextStage = () => {
+    changeBlocksToClose(gameBoard);
+    changeModalDisplay(clearModal, 'none');
     setStage(stage + 1);
   };
 
@@ -88,30 +96,33 @@ const App = () => {
         <p>모든 블럭을 밝게 만들어보세요.</p>
         <p>몇 단계까지 가능할까요?</p>
       </div>
-      <div className="nextModal" ref={nextModal}>
+      <div className="clearModal" ref={clearModal}>
         <span>Clear!</span>
-        <button onClick={nextStageClick}>다음 난이도</button>
+        <button onClick={handleClickNextStage}>다음 난이도</button>
       </div>
       <div className='gameBoard' ref={gameBoard}>
-        <ul style={{ width: `${500}px` }}>
+        <ul style={{ width: `${400}px` }}>
           {[...Array(stage + 1)].map((y, row) => (
-            <li key={row} style={{ height: `${Math.floor(500 / (stage + 1))}px` }}>
+            <li key={row} style={{ height: `${Math.floor(400 / (stage + 1))}px` }}>
               <ul>
                 {[...Array(stage + 1)].map((x, col) =>
                   <li key={`${row}${col}`}
                     className='close'
                     style={{
-                      width: `${Math.floor(500 / (stage + 1))}px`,
-                      height: `${Math.floor(500 / (stage + 1))}px`
+                      width: `${Math.floor(400 / (stage + 1))}px`,
+                      height: `${Math.floor(400 / (stage + 1))}px`
                     }}
-                    onMouseOver={() => { blockHover('over', row, col) }}
-                    onMouseLeave={() => { blockHover('leave', row, col) }}
-                    onClick={() => { blockClick(row, col); }} />
+                    onMouseOver={() => { handleMouseOverBlock('over', row, col) }}
+                    onMouseLeave={() => { handleMouseOverBlock('leave', row, col) }}
+                    onClick={() => { handleMouseClickBlock(row, col); }} />
                 )}
               </ul>
             </li>
           ))}
         </ul>
+      </div>
+      <div>
+        <button onClick={() => { changeBlocksToClose(gameBoard) }}>초기화</button>
       </div>
     </div>
   )
