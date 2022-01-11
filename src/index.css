@@ -49,13 +49,29 @@ ul {
   font-size: 50px;
 }
 
-button {
-  padding: 0.5rem 1rem;
+.clearModal > button {
+  padding: 10px 20px;
   color: #fff;
-  background: salmon;
+  background-color: salmon;
   border: none;
   cursor: pointer;
-  margin: 5px 0;
+  margin: 10px 0;
+}
+
+.utilBox {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.utilBox > button {
+  padding: 10px 20px;
+  color: #000;
+  background-color: darkgrey;
+  border: none;
+  cursor: pointer;
+  margin: 10px 0;
 }
 
 .gameBoard > ul {

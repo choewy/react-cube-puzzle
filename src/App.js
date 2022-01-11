@@ -121,7 +121,7 @@ const App = () => {
           ))}
         </ul>
       </div>
-      <div>
+      <div className='utilBox'>
         <button onClick={() => { changeBlocksToClose(gameBoard) }}>초기화</button>
       </div>
     </div>
